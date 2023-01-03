@@ -1,45 +1,13 @@
-Do at least ONE of the following tasks: refactor is mandatory. Write tests is optional, will be good bonus to see it. 
-Please do not invest more than 2-4 hours on this.
-Upload your results to a Github repo, for easier sharing and reviewing.
-
-Thank you and good luck!
-
-
-
-Code to refactor
-=================
-1) app/Http/Controllers/BookingController.php
-2) app/Repository/BookingRepository.php
-
-Code to write tests (optional)
-=====================
-3) App/Helpers/TeHelper.php method willExpireAt
-4) App/Repository/UserRepository.php, method createOrUpdate
+1) authenticatedUser can be access from Auth::user()
+2) all the users should be differentiate on behalf of roles and every roles have their permissions
+3) no need to assign user_type into env file(it can be implement by RBAC) and we also cannot access env variables directly into controllers it can access throug config/app.php commonly. I have used it as enums which will be a php class and every constants and enums define there.
+4) it will be good practice to use JSONResource response for APIs.
+5) in Store functions, validations should be defined in StoreRequest file, no need to check every variables in controllers or repository class.
+6) default values should be defined in DB if no variables found in request then DB automatically assign the default values.
+7) for whereIn queries we can check the param and it should be an array and lenght of the array will be greater then 0 
+8) attribute casting should be written in model class by using(setVariablenameAttriute) rather than to use it in controllers or repositories
+9) to check form request contains only particular value then use $request->safe()->only(['val1', 'val2']) in  store/update form request ;
+10) dont understand why the code didn't use proper implementation of Laravel Queue Jobs
 
 
-----------------------------
-
-What I expect in your repo:
-
-X. A readme with:   Your thoughts about the code. What makes it amazing code. Or what makes it ok code. Or what makes it terrible code. How would you have done it. Thoughts on formatting, structure, logic.. The more details that you can provide about the code (what's terrible about it or/and what is good about it) the easier for us to assess your coding style, mentality etc
-
-And 
-
-Y.  Refactor it if you feel it needs refactoring. The more love you put into it. The easier for us to asses your thoughts, code principles etc
-
-
-IMPORTANT: Make two commits. First commit with original code. Second with your refactor so we can easily trace changes. 
-
-
-NB: you do not need to set up the code on local and make the web app run. It will not run as its not a complete web app. This is purely to assess you thoughts about code, formatting, logic etc
-
-
-===== So expected output is a GitHub link with either =====
-
-1. Readme described above (point X above) + refactored code 
-OR
-2. Readme described above (point X above) + refactored core + a unit test of the code that we have sent
-
-Thank you!
-
-
+upto so far i realised that some of the code logic is very messy not follows the good practices, and I am unable to read and understand all the code line by line to identify all of the issues just for my code test. some of the issue i have highlighted are mentioned-above.

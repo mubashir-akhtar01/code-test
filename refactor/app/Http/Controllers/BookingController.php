@@ -39,13 +39,12 @@ class BookingController extends Controller
 
             $response = $this->repository->getUsersJobs($user_id);
 
-        }
-        elseif($request->__authenticatedUser->user_type == env('ADMIN_ROLE_ID') || $request->__authenticatedUser->user_type == env('SUPERADMIN_ROLE_ID'))
-        {
+        } elseif ( Gate::allows('get-all-users') ) {
             $response = $this->repository->getAll($request);
         }
 
-        return response($response);
+        $resp = $response ?? [];
+        return new BookingResource($resp);
     }
 
     /**
@@ -55,19 +54,18 @@ class BookingController extends Controller
     public function show($id)
     {
         $job = $this->repository->with('translatorJobRel.user')->find($id);
-
-        return response($job);
+        return new BookingResource($job);
     }
 
     /**
      * @param Request $request
      * @return mixed
      */
-    public function store(Request $request)
+    public function store(StoreBookingRequest $request)
     {
         $data = $request->all();
 
-        $response = $this->repository->store($request->__authenticatedUser, $data);
+        $response = $this->repository->store(\Auth::user(), $data);
 
         return response($response);
 
@@ -78,10 +76,10 @@ class BookingController extends Controller
      * @param Request $request
      * @return mixed
      */
-    public function update($id, Request $request)
+    public function update(UpdateBookingRequest $request,$id)
     {
         $data = $request->all();
-        $cuser = $request->__authenticatedUser;
+        $cuser = \Auth::user();
         $response = $this->repository->updateJob($id, array_except($data, ['_token', 'submit']), $cuser);
 
         return response($response);
@@ -96,6 +94,9 @@ class BookingController extends Controller
         $adminSenderEmail = config('app.adminemail');
         $data = $request->all();
 
+        // it should dispatch the job from here
+        // StoreJobEmail::dispatch($data)->onQueue('store_job_email');
+        
         $response = $this->repository->storeJobEmail($data);
 
         return response($response);
